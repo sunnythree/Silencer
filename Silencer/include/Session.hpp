@@ -6,6 +6,9 @@ namespace Silencer {
 	public:
 		Session();
 		~Session();
+		void init();
+		void run();
+		void close();
 
 	private:
 

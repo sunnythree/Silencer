@@ -4,13 +4,21 @@
 #include "Silencer.h"
 #include "Node.hpp"
 #include "Edge.hpp"
-using namespace std;
-using namespace Silencer;
+#include "Common.hpp"
+
+using std::cout;
+using std::endl;
+
+using Silencer::Node;
+using Silencer::Edge;
+using Silencer::operator<<;
 
 int main()
 {
-	Node<float> node;
-	Edge<float> edge;
+	shared_ptr<Node<float>> node1 = make_shared<Node<float>>();
+	shared_ptr<Node<float>> node2 = make_shared<Node<float>>();
+	node1 << node2;
+	
 	cout << "Hello CMake。" << endl;
 	system("pause");
 	return 0;

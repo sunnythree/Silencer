@@ -7,6 +7,7 @@ namespace Silencer {
 	public:
 		Graph();
 		~Graph();
+		void build();
 
 	private:
 
