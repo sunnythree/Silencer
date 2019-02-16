@@ -6,6 +6,7 @@
 #include "Edge.hpp"
 using namespace std;
 using namespace Silencer;
+
 int main()
 {
 	Node<float> node;
