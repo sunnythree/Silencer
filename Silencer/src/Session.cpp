@@ -1,9 +1,12 @@
 #include"Session.hpp"
 
-Session::Session()
-{
-}
+namespace Silencer {
 
-Session::~Session()
-{
+	Session::Session()
+	{
+	}
+
+	Session::~Session()
+	{
+	}
 }

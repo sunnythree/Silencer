@@ -7,5 +7,9 @@ set(
 	SRC_LIST_SILENCER
 	Edge.cpp
 	Node.cpp
+	Graph.cpp
+	Session.cpp
+	Shape.cpp
+	Tensor.cpp
 	)
 add_library  (Libsilencer ${SRC_LIST_SILENCER})

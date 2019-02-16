@@ -8,6 +8,7 @@ using std::shared_ptr;
 using std::make_shared;
 
 namespace Silencer {
+
 	#define TEMPLATE_CLASS_INITIALIZE(classname) \
 	template class classname<float>;\
 	template class classname<double>

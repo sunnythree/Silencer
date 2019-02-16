@@ -19,6 +19,8 @@ namespace Silencer {
 		~Node();
 		void add_in_edge(shared_ptr<Edge<DType>>& in_edge);
 		void add_out_edge(shared_ptr<Edge<DType>>& out_edge);
+		vector<shared_ptr<Edge<DType>>>& get_in_edges();
+		vector<shared_ptr<Edge<DType>>>& get_out_edges();
 		
 	private:
 		vector<shared_ptr<Edge<DType>>> in_edges;

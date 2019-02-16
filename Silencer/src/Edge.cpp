@@ -2,6 +2,7 @@
 #include "Node.hpp"
 #include "Common.hpp"
 
+
 namespace Silencer {
 
 	template<typename DType>
