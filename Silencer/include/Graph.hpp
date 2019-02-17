@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <memory>
+#include <vector>
 #include "Edge.hpp"
 #include "Node.hpp"
 
@@ -24,8 +25,12 @@ namespace Silencer {
 		void Build(shared_ptr<Node<DType>> in, shared_ptr<Node<DType>> out, GRAPH_SCAN scan_mode);
 		
 	private:
-		void BroadScan(shared_ptr<Node<DType>> in,shared_ptr<Node<DType>> out);
-		void DeepScan(shared_ptr<Node<DType>> in,shared_ptr<Node<DType>> out);
+		vector<shared_ptr<Node<DType>>> forward_pipeline;
+		vector<shared_ptr<Node<DType>>> backward_pipeline;
+		void ForwardBroadScan(shared_ptr<Node<DType>> in,shared_ptr<Node<DType>> out);
+		void ForwardDeepScan(shared_ptr<Node<DType>> in,shared_ptr<Node<DType>> out);
+		void BackwardBroadScan(shared_ptr<Node<DType>> in, shared_ptr<Node<DType>> out);
+		void BackwardDeepScan(shared_ptr<Node<DType>> in, shared_ptr<Node<DType>> out);
 	};
 
 

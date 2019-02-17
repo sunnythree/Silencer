@@ -28,7 +28,7 @@ namespace Silencer {
 	}
 
 	template<typename DType>
-	void Graph<DType>::BroadScan(shared_ptr<Node<DType>> in,shared_ptr<Node<DType>> out)
+	void Graph<DType>::ForwardBroadScan(shared_ptr<Node<DType>> in,shared_ptr<Node<DType>> out)
 	{
 		if (in == nullptr || out == nullptr) {
 			return;
@@ -40,7 +40,7 @@ namespace Silencer {
 			work_queue.pop();
 			vector<shared_ptr<Edge<DType>>> in_edges = node->get_in_edges();
 			if (in_edges.empty()) {
-				in->set_visited(true);
+				node->set_visited(true);
 				Log::d("hello", in->get_name());
 			}
 			else {
@@ -57,22 +57,27 @@ namespace Silencer {
 					}
 				}
 				if (can_visited) {
-					in->set_visited(true);
-					Log::d("hello", in->get_name());
+					node->set_visited(true);
+					Log::d("hello", node->get_name());
 				}
 				else {
 					work_queue.push(node);
 				}
 			}
-			vector<shared_ptr<Edge<DType>>> out_edges = in->get_out_edges();
-			for (auto tmp1 : out_edges) {
-				DeepScan(tmp1->get_out(), out);
+			vector<shared_ptr<Edge<DType>>> out_edges = node->get_out_edges();
+			if (out_edges.empty()) {
+				continue;
+			}
+			for (auto tmp : out_edges) {
+				if (!tmp->get_out()->is_visited()) {
+					work_queue.push(tmp->get_out());
+				}
 			}
 		}
 	}
 
 	template<typename DType>
-	void Graph<DType>::DeepScan(shared_ptr<Node<DType>> in,shared_ptr<Node<DType>> out)
+	void Graph<DType>::ForwardDeepScan(shared_ptr<Node<DType>> in,shared_ptr<Node<DType>> out)
 	{
 		if (in == nullptr || out == nullptr) {
 			return;
@@ -90,7 +95,7 @@ namespace Silencer {
 			}
 			for (auto tmp : in_edges) {
 				if (!tmp->get_in()->is_visited()) {
-					DeepScan(tmp->get_out(), out);
+					ForwardDeepScan(tmp->get_out(), out);
 				}
 			}
 			in->set_visited(true);
@@ -101,18 +106,104 @@ namespace Silencer {
 			return;
 		}
 		for (auto tmp1 : out_edges) {
-			DeepScan(tmp1->get_out(), out);
+			ForwardDeepScan(tmp1->get_out(), out);
 		}
 	}
+
+	template<typename DType>
+	void Graph<DType>::BackwardBroadScan(shared_ptr<Node<DType>> out, shared_ptr<Node<DType>> in)
+	{
+		if (in == nullptr || out == nullptr) {
+			return;
+		}
+		queue<shared_ptr<Node<DType>>> work_queue;
+		work_queue.push(out);
+		while (!work_queue.empty()) {
+			shared_ptr<Node<DType>> node = work_queue.front();
+			work_queue.pop();
+			vector<shared_ptr<Edge<DType>>> out_edges = node->get_out_edges();
+			if (out_edges.empty()) {
+				node->set_visited(false);
+				Log::d("hello", out->get_name());
+			}
+			else {
+				if (in == out) {
+					node->set_visited(false);
+					Log::d("hello", node->get_name());
+					return;
+				}
+				bool can_visited = true;
+				for (auto tmp : out_edges) {
+					if (tmp->get_out()->is_visited()) {
+						can_visited = false;
+						work_queue.push(tmp->get_out());
+					}
+				}
+				if (can_visited) {
+					node->set_visited(false);
+					Log::d("hello", node->get_name());
+				}
+				else {
+					work_queue.push(node);
+				}
+			}
+			vector<shared_ptr<Edge<DType>>> in_edges = node->get_in_edges();
+			if (in_edges.empty()) {
+				continue;
+			}
+			for (auto tmp : in_edges) {
+				if (tmp->get_in()->is_visited()) {
+					work_queue.push(tmp->get_in());
+				}
+			}
+		}
+	}
+
+	template<typename DType>
+	void Graph<DType>::BackwardDeepScan(shared_ptr<Node<DType>> out, shared_ptr<Node<DType>> in)
+	{
+		if (in == nullptr || out == nullptr) {
+			return;
+		}
+		vector<shared_ptr<Edge<DType>>> out_edges = out->get_out_edges();
+		if (out_edges.empty()) {
+			out->set_visited(false);
+			Log::d("hello", out->get_name());
+		}
+		else {
+			if (in == out) {
+				out->set_visited(false);
+				Log::d("hello", out->get_name());
+				return;
+			}
+			for (auto tmp : out_edges) {
+				if (tmp->get_out()->is_visited()) {
+					BackwardDeepScan( tmp->get_out(),in);
+				}
+			}
+			out->set_visited(false);
+			Log::d("hello", out->get_name());
+		}
+		vector<shared_ptr<Edge<DType>>> in_edges = out->get_in_edges();
+		if (in_edges.empty()) {
+			return;
+		}
+		for (auto tmp1 : in_edges) {
+			BackwardDeepScan(tmp1->get_in(),in);
+		}
+	}
+
 
 	template<typename DType>
 	void Graph<DType>::Build(shared_ptr<Node<DType>> in, shared_ptr<Node<DType>> out, GRAPH_SCAN scan_mode)
 	{
 		if (scan_mode == DEEP) {
-			DeepScan(in,out);
+			ForwardDeepScan(in,out);
+			BackwardDeepScan(out,in);
 		}
 		else {
-			BroadScan(in, out);
+			ForwardBroadScan(in, out);
+			BackwardBroadScan(out,in);
 		}
 	}
 

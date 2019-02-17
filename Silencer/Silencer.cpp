@@ -20,10 +20,16 @@ int main()
 	shared_ptr<Node<float>> node1 = make_shared<Node<float>>("node1");
 	shared_ptr<Node<float>> node2 = make_shared<Node<float>>("node2");
 	shared_ptr<Node<float>> node3 = make_shared<Node<float>>("node3");
-	node1 << node2 << node3;
+	shared_ptr<Node<float>> node4 = make_shared<Node<float>>("node4");
+	shared_ptr<Node<float>> node5 = make_shared<Node<float>>("node5");
+	shared_ptr<Node<float>> node6 = make_shared<Node<float>>("node6");
+	shared_ptr<Node<float>> node7 = make_shared<Node<float>>("node7");
+	shared_ptr<Node<float>> node8 = make_shared<Node<float>>("node8");
+
+	node1 << node2 << node3 << node4 << node5 << node6 << node7 << node8;
 
 	shared_ptr<Graph<float>> graph = make_shared<Graph<float>>();
-	graph->Build(node1,node3,Graph<float>::DEEP);
+	graph->Build(node1,node8,Graph<float>::BROAD);
 	
 	cout << "Hello CMake。" << endl;
 	system("pause");
