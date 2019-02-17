@@ -11,5 +11,6 @@ set(
 	Session.cpp
 	Shape.cpp
 	Tensor.cpp
+	Log.cpp
 	)
 add_library  (Libsilencer ${SRC_LIST_SILENCER})

@@ -5,6 +5,7 @@
 #include <queue>
 #include "Common.hpp"
 #include "Graph.hpp"
+#include "Log.hpp"
 
 
 
@@ -12,8 +13,7 @@ using std::shared_ptr;
 using std::vector;
 using std::string;
 using std::queue;
-using std::cout;
-using std::endl;
+
 
 namespace Silencer {
 
@@ -41,12 +41,12 @@ namespace Silencer {
 			vector<shared_ptr<Edge<DType>>> in_edges = node->get_in_edges();
 			if (in_edges.empty()) {
 				in->set_visited(true);
-				cout << "node name is " << node->get_name() << endl;
+				Log::d("hello", in->get_name());
 			}
 			else {
 				if (in == out) {
 					node->set_visited(true);
-					cout << "node name is " << in->get_name() << endl;
+					Log::d("hello", in->get_name());
 					return;
 				}
 				bool can_visited = true;
@@ -58,7 +58,7 @@ namespace Silencer {
 				}
 				if (can_visited) {
 					in->set_visited(true);
-					cout << "node name is " << node->get_name() << endl;
+					Log::d("hello", in->get_name());
 				}
 				else {
 					work_queue.push(node);
@@ -80,12 +80,12 @@ namespace Silencer {
 		vector<shared_ptr<Edge<DType>>> in_edges = in->get_in_edges();
 		if (in_edges.empty()) {
 			in->set_visited(true);
-			cout << "node name is " << in->get_name() << endl;
+			Log::d("hello", in->get_name());
 		}
 		else {
 			if (in == out) {
 				in->set_visited(true);
-				cout << "node name is " << in->get_name() << endl;
+				Log::d("hello", in->get_name());
 				return;
 			}
 			for (auto tmp : in_edges) {
@@ -94,7 +94,7 @@ namespace Silencer {
 				}
 			}
 			in->set_visited(true);
-			cout << "node name is " << in->get_name() << endl;
+			Log::d("hello", in->get_name());
 		}
 		vector<shared_ptr<Edge<DType>>> out_edges = in->get_out_edges();
 		if (out_edges.empty()) {
