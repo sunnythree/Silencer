@@ -2,6 +2,7 @@
 #include <memory>
 #include <vector>
 #include <string>
+#include <queue>
 #include "Common.hpp"
 #include "Graph.hpp"
 
@@ -10,6 +11,7 @@
 using std::shared_ptr;
 using std::vector;
 using std::string;
+using std::queue;
 using std::cout;
 using std::endl;
 
@@ -28,7 +30,45 @@ namespace Silencer {
 	template<typename DType>
 	void Graph<DType>::BroadScan(shared_ptr<Node<DType>> in,shared_ptr<Node<DType>> out)
 	{
-		return;
+		if (in == nullptr || out == nullptr) {
+			return;
+		}
+		queue<shared_ptr<Node<DType>>> work_queue;
+		work_queue.push(in);
+		while (!work_queue.empty()) {
+			shared_ptr<Node<DType>> node = work_queue.front();
+			work_queue.pop();
+			vector<shared_ptr<Edge<DType>>> in_edges = node->get_in_edges();
+			if (in_edges.empty()) {
+				in->set_visited(true);
+				cout << "node name is " << node->get_name() << endl;
+			}
+			else {
+				if (in == out) {
+					node->set_visited(true);
+					cout << "node name is " << in->get_name() << endl;
+					return;
+				}
+				bool can_visited = true;
+				for (auto tmp : in_edges) {
+					if (!tmp->get_in()->is_visited()) {
+						can_visited = false;
+						work_queue.push(tmp->get_in());
+					}
+				}
+				if (can_visited) {
+					in->set_visited(true);
+					cout << "node name is " << node->get_name() << endl;
+				}
+				else {
+					work_queue.push(node);
+				}
+			}
+			vector<shared_ptr<Edge<DType>>> out_edges = in->get_out_edges();
+			for (auto tmp1 : out_edges) {
+				DeepScan(tmp1->get_out(), out);
+			}
+		}
 	}
 
 	template<typename DType>
@@ -39,15 +79,8 @@ namespace Silencer {
 		}
 		vector<shared_ptr<Edge<DType>>> in_edges = in->get_in_edges();
 		if (in_edges.empty()) {
-			vector<shared_ptr<Edge<DType>>> out_edges = in->get_out_edges();
-			if (out_edges.empty()) {
-				return;
-			}
 			in->set_visited(true);
 			cout << "node name is " << in->get_name() << endl;
-			for (auto tmp1 : out_edges) {
-				DeepScan(tmp1->get_out(),out);
-			}
 		}
 		else {
 			if (in == out) {
@@ -62,17 +95,25 @@ namespace Silencer {
 			}
 			in->set_visited(true);
 			cout << "node name is " << in->get_name() << endl;
-			vector<shared_ptr<Edge<DType>>> out_edges = in->get_out_edges();
-			for (auto tmp1 : out_edges) {
-				DeepScan(tmp1->get_out(), out);
-			}
+		}
+		vector<shared_ptr<Edge<DType>>> out_edges = in->get_out_edges();
+		if (out_edges.empty()) {
+			return;
+		}
+		for (auto tmp1 : out_edges) {
+			DeepScan(tmp1->get_out(), out);
 		}
 	}
 
 	template<typename DType>
-	void Graph<DType>::Build(shared_ptr<Node<DType>> in, shared_ptr<Node<DType>> out)
+	void Graph<DType>::Build(shared_ptr<Node<DType>> in, shared_ptr<Node<DType>> out, GRAPH_SCAN scan_mode)
 	{
-		DeepScan(in,out);
+		if (scan_mode == DEEP) {
+			DeepScan(in,out);
+		}
+		else {
+			BroadScan(in, out);
+		}
 	}
 
 	TEMPLATE_CLASS_INITIALIZE(Graph);

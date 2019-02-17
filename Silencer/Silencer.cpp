@@ -23,7 +23,7 @@ int main()
 	node1 << node2 << node3;
 
 	shared_ptr<Graph<float>> graph = make_shared<Graph<float>>();
-	graph->Build(node1,node3);
+	graph->Build(node1,node3,Graph<float>::DEEP);
 	
 	cout << "Hello CMake。" << endl;
 	system("pause");
