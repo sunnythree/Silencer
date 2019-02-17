@@ -21,11 +21,15 @@ namespace Silencer {
 		void add_out_edge(shared_ptr<Edge<DType>>& out_edge);
 		vector<shared_ptr<Edge<DType>>>& get_in_edges();
 		vector<shared_ptr<Edge<DType>>>& get_out_edges();
+		string get_name();
+		bool is_visited();
+		void set_visited(bool visited);
 		
 	private:
 		vector<shared_ptr<Edge<DType>>> in_edges;
 		vector<shared_ptr<Edge<DType>>> out_edges;
 		string name;
+		bool visited;
 	};
 
 }

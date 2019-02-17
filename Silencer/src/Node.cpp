@@ -4,12 +4,15 @@
 namespace Silencer {
 
 	template<typename DType>
-	Node<DType>::Node()
+	Node<DType>::Node():
+		visited(false)
 	{
 	}
 
 	template<typename DType>
-	Node<DType>::Node(string local_name):name(local_name)
+	Node<DType>::Node(string local_name):
+		name(local_name),
+		visited(false)
 	{
 
 	}
@@ -41,6 +44,24 @@ namespace Silencer {
 	vector<shared_ptr<Edge<DType>>>& Node<DType>::get_out_edges()
 	{
 		return out_edges;
+	}
+
+	template<typename DType>
+	string Node<DType>::get_name()
+	{
+		return name;
+	}
+
+	template<typename DType>
+	bool Node<DType>::is_visited()
+	{
+		return this->visited;
+	}
+
+	template<typename DType>
+	void Node<DType>::set_visited(bool visited)
+	{
+		this->visited = visited;
 	}
 
 	TEMPLATE_CLASS_INITIALIZE(Node);

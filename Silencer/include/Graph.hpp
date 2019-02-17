@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <memory>
+#include "Edge.hpp"
 #include "Node.hpp"
 
 using std::shared_ptr;
@@ -14,10 +15,10 @@ namespace Silencer {
 	public:
 		Graph();
 		~Graph();
-		void build(shared_ptr<Node<DType>> in, shared_ptr<Node<DType>> out);
+		void Build(shared_ptr<Node<DType>> in, shared_ptr<Node<DType>> out);
 	private:
-		void BroadScan(shared_ptr<Node<DType>> in);
-		void DeepScan(shared_ptr<Node<DType>> in);
+		void BroadScan(shared_ptr<Node<DType>> in,shared_ptr<Node<DType>> out);
+		void DeepScan(shared_ptr<Node<DType>> in,shared_ptr<Node<DType>> out);
 	};
 
 
