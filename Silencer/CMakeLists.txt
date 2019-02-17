@@ -3,6 +3,8 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
+project ("Silencer")
+
 # 头文件查找目录
 include_directories("include")
 
