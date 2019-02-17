@@ -30,6 +30,7 @@ int main()
 
 	shared_ptr<Graph<float>> graph = make_shared<Graph<float>>();
 	graph->Build(node1,node8,Graph<float>::BROAD);
+	graph->report();
 	
 	cout << "Hello CMake。" << endl;
 	system("pause");

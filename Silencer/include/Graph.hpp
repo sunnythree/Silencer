@@ -23,6 +23,7 @@ namespace Silencer {
 		Graph();
 		~Graph();
 		void Build(shared_ptr<Node<DType>> in, shared_ptr<Node<DType>> out, GRAPH_SCAN scan_mode);
+		void report();
 		
 	private:
 		vector<shared_ptr<Node<DType>>> forward_pipeline;

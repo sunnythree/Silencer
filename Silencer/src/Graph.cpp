@@ -41,12 +41,12 @@ namespace Silencer {
 			vector<shared_ptr<Edge<DType>>> in_edges = node->get_in_edges();
 			if (in_edges.empty()) {
 				node->set_visited(true);
-				Log::d("hello", in->get_name());
+				forward_pipeline.push_back(node);
 			}
 			else {
 				if (in == out) {
 					node->set_visited(true);
-					Log::d("hello", in->get_name());
+					forward_pipeline.push_back(node);
 					return;
 				}
 				bool can_visited = true;
@@ -58,7 +58,7 @@ namespace Silencer {
 				}
 				if (can_visited) {
 					node->set_visited(true);
-					Log::d("hello", node->get_name());
+					forward_pipeline.push_back(node);
 				}
 				else {
 					work_queue.push(node);
@@ -85,12 +85,12 @@ namespace Silencer {
 		vector<shared_ptr<Edge<DType>>> in_edges = in->get_in_edges();
 		if (in_edges.empty()) {
 			in->set_visited(true);
-			Log::d("hello", in->get_name());
+			forward_pipeline.push_back(in);
 		}
 		else {
 			if (in == out) {
 				in->set_visited(true);
-				Log::d("hello", in->get_name());
+				forward_pipeline.push_back(in);
 				return;
 			}
 			for (auto tmp : in_edges) {
@@ -99,7 +99,7 @@ namespace Silencer {
 				}
 			}
 			in->set_visited(true);
-			Log::d("hello", in->get_name());
+			forward_pipeline.push_back(in);
 		}
 		vector<shared_ptr<Edge<DType>>> out_edges = in->get_out_edges();
 		if (out_edges.empty()) {
@@ -124,12 +124,12 @@ namespace Silencer {
 			vector<shared_ptr<Edge<DType>>> out_edges = node->get_out_edges();
 			if (out_edges.empty()) {
 				node->set_visited(false);
-				Log::d("hello", out->get_name());
+				backward_pipeline.push_back(node);
 			}
 			else {
 				if (in == out) {
 					node->set_visited(false);
-					Log::d("hello", node->get_name());
+					backward_pipeline.push_back(node);
 					return;
 				}
 				bool can_visited = true;
@@ -141,7 +141,7 @@ namespace Silencer {
 				}
 				if (can_visited) {
 					node->set_visited(false);
-					Log::d("hello", node->get_name());
+					backward_pipeline.push_back(node);
 				}
 				else {
 					work_queue.push(node);
@@ -168,12 +168,12 @@ namespace Silencer {
 		vector<shared_ptr<Edge<DType>>> out_edges = out->get_out_edges();
 		if (out_edges.empty()) {
 			out->set_visited(false);
-			Log::d("hello", out->get_name());
+			backward_pipeline.push_back(out);
 		}
 		else {
 			if (in == out) {
 				out->set_visited(false);
-				Log::d("hello", out->get_name());
+				backward_pipeline.push_back(out);
 				return;
 			}
 			for (auto tmp : out_edges) {
@@ -182,7 +182,7 @@ namespace Silencer {
 				}
 			}
 			out->set_visited(false);
-			Log::d("hello", out->get_name());
+			backward_pipeline.push_back(out);
 		}
 		vector<shared_ptr<Edge<DType>>> in_edges = out->get_in_edges();
 		if (in_edges.empty()) {
@@ -205,6 +205,23 @@ namespace Silencer {
 			ForwardBroadScan(in, out);
 			BackwardBroadScan(out,in);
 		}
+	}
+
+	template<typename DType>
+	void Graph<DType>::report()
+	{
+		Log::d("Graph","forward_pipeline: ");
+		string tmp_string;
+		for (auto tmp : forward_pipeline) {
+			tmp_string += tmp->get_name() + " ";
+		}
+		Log::d("Graph", tmp_string);
+		tmp_string = "";
+		Log::d("Graph", "backward_pipeline: ");
+		for (auto tmp : backward_pipeline) {
+			tmp_string += tmp->get_name() + " ";
+		}
+		Log::d("Graph", tmp_string);
 	}
 
 	TEMPLATE_CLASS_INITIALIZE(Graph);
